@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://roboboy.dev/schemas/panel-inventory-entry-v1.json",
+  "title": "Robo-Boy Panel Inventory Entry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "name",
+    "description",
+    "repository",
+    "author",
+    "latest"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$",
+      "maxLength": 128
+    },
+    "name": { "type": "string", "minLength": 1, "maxLength": 120 },
+    "description": { "type": "string", "minLength": 1, "maxLength": 1000 },
+    "repository": { "type": "string", "format": "uri", "pattern": "^https://" },
+    "author": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "url": { "type": "string", "format": "uri" }
+      }
+    },
+    "latest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "compatibility", "capabilities", "distribution"],
+      "properties": {
+        "version": { "type": "string" },
+        "compatibility": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["panelApi", "roboboy"],
+          "properties": {
+            "panelApi": { "type": "string", "minLength": 1 },
+            "roboboy": { "type": "string", "minLength": 1 }
+          }
+        },
+        "capabilities": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "ros",
+              "storage",
+              "network",
+              "web-bluetooth",
+              "web-usb",
+              "web-serial",
+              "camera",
+              "microphone"
+            ]
+          }
+        },
+        "distribution": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "manifestUrl", "bundleUrl", "entryPoint"],
+          "properties": {
+            "type": { "const": "javascript-bundle" },
+            "manifestUrl": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https://"
+            },
+            "bundleUrl": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https://"
+            },
+            "entryPoint": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    },
+    "tags": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1, "maxLength": 80 }
+    },
+    "icon": { "type": "string", "format": "uri" },
+    "preview": { "type": "string", "format": "uri" }
+  }
+}

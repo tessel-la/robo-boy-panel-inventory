@@ -1,0 +1,4 @@
+{
+  "schemaVersion": 1,
+  "panels": ["./panels/la.tessel.roboboy.hello.json"]
+}
