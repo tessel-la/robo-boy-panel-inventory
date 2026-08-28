@@ -27,9 +27,16 @@ copy the selected artifact into a versioned path in the deployment's same-origin
 integrity and compatibility, and update the deployment-local `installed.json` registry. This separation lets the
 catalog scale without becoming a monorepo and lets removal/update policy remain deployment-owned.
 
+Organizations may host a private inventory using the same schema and combine it with the official inventory in
+deployment configuration. Private source code never needs to enter Robo-Boy or this public catalog: only the
+organization's authenticated inventory and immutable release service need to be reachable by the deployment
+installer. Panel IDs should use a reverse-domain namespace controlled by the organization. Duplicate IDs across
+configured inventories are rejected instead of allowing a private entry to override an official release.
+
 The optional `icon` and `preview` fields may reference HTTPS assets. Authors should keep release URLs immutable;
 SHA-256 integrity is required, while publisher signatures, transactional staging/rollback, revocation, and an
 inventory review policy remain prerequisites for automated one-click installation.
 
-This directory is the proposed standalone inventory structure used by the current vertical slice. Example release
-URLs are publication targets and may not exist until the example repositories are published.
+The official inventory is consumed directly by Robo-Boy's remote panel installer. Catalog entries must be merged
+only after their release URLs are anonymously reachable and their recorded integrity matches the exact published
+bundle bytes.
