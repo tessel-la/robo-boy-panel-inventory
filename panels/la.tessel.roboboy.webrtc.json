@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "la.tessel.roboboy.webrtc",
+  "name": "WebRTC / RTSP Camera",
+  "description": "Plays low-latency WHEP streams and documents their RTSP gateway source.",
+  "repository": "https://github.com/tessel-la/roboboy-webrtc-panel",
+  "author": {
+    "name": "Tessella"
+  },
+  "latest": {
+    "version": "1.2.0",
+    "compatibility": {
+      "panelApi": "^1.0.0",
+      "roboboy": ">=0.3.0-0 <1.0.0"
+    },
+    "capabilities": ["network", "storage"],
+    "distribution": {
+      "type": "javascript-bundle",
+      "manifestUrl": "https://github.com/tessel-la/roboboy-webrtc-panel/releases/download/v1.2.0/roboboy.panel.json",
+      "bundleUrl": "https://github.com/tessel-la/roboboy-webrtc-panel/releases/download/v1.2.0/index.js",
+      "entryPoint": "index.js",
+      "integrity": "sha256-RA2Uwnsm/Nl+A5IoteWCDv7Vn/rCfyg9i8U2IlWRF0E="
+    }
+  },
+  "tags": ["camera", "webrtc", "whep", "rtsp", "video"]
+}

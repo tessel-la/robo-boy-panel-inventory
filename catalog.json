@@ -1,4 +1,8 @@
 {
   "schemaVersion": 1,
-  "panels": ["./panels/la.tessel.roboboy.hello.json"]
+  "panels": [
+    "./panels/la.tessel.roboboy.hello.json",
+    "./panels/la.tessel.roboboy.timeseries.json",
+    "./panels/la.tessel.roboboy.webrtc.json"
+  ]
 }

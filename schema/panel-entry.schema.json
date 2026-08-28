@@ -66,7 +66,13 @@
         "distribution": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["type", "manifestUrl", "bundleUrl", "entryPoint"],
+          "required": [
+            "type",
+            "manifestUrl",
+            "bundleUrl",
+            "entryPoint",
+            "integrity"
+          ],
           "properties": {
             "type": { "const": "javascript-bundle" },
             "manifestUrl": {
@@ -79,7 +85,11 @@
               "format": "uri",
               "pattern": "^https://"
             },
-            "entryPoint": { "type": "string", "minLength": 1 }
+            "entryPoint": { "type": "string", "minLength": 1 },
+            "integrity": {
+              "type": "string",
+              "pattern": "^sha256-[A-Za-z0-9+/]{43}=$"
+            }
           }
         }
       }

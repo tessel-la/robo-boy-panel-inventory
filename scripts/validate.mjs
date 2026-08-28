@@ -16,6 +16,7 @@ const capabilities = new Set([
 ]);
 const semverPattern = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/;
 const idPattern = /^[a-z0-9]+(?:[._-][a-z0-9]+)*$/;
+const integrityPattern = /^sha256-[A-Za-z0-9+/]{43}=$/;
 
 const readJson = async (path) => JSON.parse(await readFile(path, "utf8"));
 const isHttpsUrl = (value) => {
@@ -109,6 +110,20 @@ for (const relativePath of catalog.panels) {
   assert(
     entry.latest.distribution?.entryPoint,
     `${label}: distribution entryPoint is required.`,
+  );
+  assert(
+    integrityPattern.test(entry.latest.distribution?.integrity),
+    `${label}: distribution integrity must be a SHA-256 SRI value.`,
+  );
+  assert(
+    new URL(entry.latest.distribution.bundleUrl).pathname
+      .split("/")
+      .some(
+        (segment) =>
+          segment === entry.latest.version ||
+          segment === `v${entry.latest.version}`,
+      ),
+    `${label}: bundleUrl must identify the immutable release version.`,
   );
 }
 

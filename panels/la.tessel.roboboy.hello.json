@@ -18,7 +18,8 @@
       "type": "javascript-bundle",
       "manifestUrl": "https://github.com/tessel-la/roboboy-hello-panel/releases/download/v1.0.0/roboboy.panel.json",
       "bundleUrl": "https://github.com/tessel-la/roboboy-hello-panel/releases/download/v1.0.0/index.js",
-      "entryPoint": "index.js"
+      "entryPoint": "index.js",
+      "integrity": "sha256-Rq2s1jR0ViiCp/YwgG2ybbCoFjx0zbcZC3luBy1rCpk="
     }
   },
   "tags": ["example", "developer-tools"]
