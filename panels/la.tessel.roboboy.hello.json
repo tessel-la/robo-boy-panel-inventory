@@ -3,7 +3,7 @@
   "id": "la.tessel.roboboy.hello",
   "name": "Hello Panel",
   "description": "A minimal external panel that demonstrates the Robo-Boy panel lifecycle.",
-  "repository": "https://github.com/tessel-la/roboboy-hello-panel",
+  "repository": "https://github.com/tessel-la/robo-boy-hello-panel",
   "author": {
     "name": "Tessella"
   },
@@ -16,8 +16,8 @@
     "capabilities": ["storage"],
     "distribution": {
       "type": "javascript-bundle",
-      "manifestUrl": "https://github.com/tessel-la/roboboy-hello-panel/releases/download/v1.0.0/roboboy.panel.json",
-      "bundleUrl": "https://github.com/tessel-la/roboboy-hello-panel/releases/download/v1.0.0/index.js",
+      "manifestUrl": "https://github.com/tessel-la/robo-boy-hello-panel/releases/download/v1.0.0/roboboy.panel.json",
+      "bundleUrl": "https://github.com/tessel-la/robo-boy-hello-panel/releases/download/v1.0.0/index.js",
       "entryPoint": "index.js",
       "integrity": "sha256-Rq2s1jR0ViiCp/YwgG2ybbCoFjx0zbcZC3luBy1rCpk="
     }
