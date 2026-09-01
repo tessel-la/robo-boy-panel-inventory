@@ -17,6 +17,8 @@ const capabilities = new Set([
 const semverPattern = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/;
 const idPattern = /^[a-z0-9]+(?:[._-][a-z0-9]+)*$/;
 const integrityPattern = /^sha256-[A-Za-z0-9+/]{43}=$/;
+const rosResourcePattern = /^\/[A-Za-z0-9_~{}*][A-Za-z0-9_~{}/*-]*$/;
+const hostEndpoints = new Set(["videoStream"]);
 
 const readJson = async (path) => JSON.parse(await readFile(path, "utf8"));
 const isHttpsUrl = (value) => {
@@ -28,6 +30,96 @@ const isHttpsUrl = (value) => {
 };
 const assert = (condition, message) => {
   if (!condition) throw new Error(message);
+};
+const isUniqueStringArray = (value, validator, maxItems = 100) =>
+  Array.isArray(value) &&
+  value.length <= maxItems &&
+  new Set(value).size === value.length &&
+  value.every((item) => typeof item === "string" && validator(item));
+const hasOnlyKeys = (value, allowed) =>
+  value &&
+  typeof value === "object" &&
+  !Array.isArray(value) &&
+  Object.keys(value).every((key) => allowed.has(key));
+
+const validatePermissions = (entry, label) => {
+  const declared = new Set(entry.latest.capabilities);
+  const permissions = entry.latest.permissions;
+  assert(
+    permissions === undefined ||
+      hasOnlyKeys(permissions, new Set(["ros", "network"])),
+    `${label}: permissions may contain only ros and network grants.`,
+  );
+
+  if (declared.has("ros")) {
+    const ros = permissions?.ros;
+    assert(
+      hasOnlyKeys(
+        ros,
+        new Set(["discover", "selectTopic", "subscribe", "publish", "services"]),
+      ),
+      `${label}: the ros capability requires explicit ROS permissions.`,
+    );
+    assert(
+      ros.discover === undefined || typeof ros.discover === "boolean",
+      `${label}: permissions.ros.discover must be boolean.`,
+    );
+    assert(
+      ros.selectTopic === undefined || typeof ros.selectTopic === "boolean",
+      `${label}: permissions.ros.selectTopic must be boolean.`,
+    );
+    for (const key of ["subscribe", "publish", "services"]) {
+      assert(
+        ros[key] === undefined ||
+          isUniqueStringArray(ros[key], (resource) => rosResourcePattern.test(resource)),
+        `${label}: permissions.ros.${key} contains an invalid ROS resource pattern.`,
+      );
+    }
+  } else {
+    assert(
+      permissions?.ros === undefined,
+      `${label}: ROS permissions require the ros capability.`,
+    );
+  }
+
+  if (declared.has("network")) {
+    const network = permissions?.network;
+    assert(
+      hasOnlyKeys(network, new Set(["origins", "hostEndpoints"])),
+      `${label}: the network capability requires explicit network permissions.`,
+    );
+    assert(
+      network.origins === undefined ||
+        isUniqueStringArray(
+          network.origins,
+          (origin) => {
+            if (origin === "self" || origin === "https:") return true;
+            try {
+              const url = new URL(origin);
+              return url.protocol === "https:" && url.origin === origin;
+            } catch {
+              return false;
+            }
+          },
+          30,
+        ),
+      `${label}: permissions.network.origins contains an invalid HTTPS origin.`,
+    );
+    assert(
+      network.hostEndpoints === undefined ||
+        isUniqueStringArray(
+          network.hostEndpoints,
+          (endpoint) => hostEndpoints.has(endpoint),
+          hostEndpoints.size,
+        ),
+      `${label}: permissions.network.hostEndpoints contains an unknown endpoint.`,
+    );
+  } else {
+    assert(
+      permissions?.network === undefined,
+      `${label}: network permissions require the network capability.`,
+    );
+  }
 };
 
 const catalog = await readJson(resolve(projectRoot, "catalog.json"));
@@ -95,6 +187,7 @@ for (const relativePath of catalog.panels) {
     ),
     `${label}: unknown capability declaration.`,
   );
+  validatePermissions(entry, label);
   assert(
     entry.latest.distribution?.type === "javascript-bundle",
     `${label}: unsupported distribution type.`,

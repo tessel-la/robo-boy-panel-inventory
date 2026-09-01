@@ -63,6 +63,41 @@
             ]
           }
         },
+        "permissions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "ros": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "discover": { "type": "boolean" },
+                "selectTopic": { "type": "boolean" },
+                "subscribe": { "$ref": "#/$defs/rosResources" },
+                "publish": { "$ref": "#/$defs/rosResources" },
+                "services": { "$ref": "#/$defs/rosResources" }
+              }
+            },
+            "network": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "origins": {
+                  "type": "array",
+                  "maxItems": 30,
+                  "uniqueItems": true,
+                  "items": { "type": "string", "minLength": 1, "maxLength": 2048 }
+                },
+                "hostEndpoints": {
+                  "type": "array",
+                  "maxItems": 1,
+                  "uniqueItems": true,
+                  "items": { "enum": ["videoStream"] }
+                }
+              }
+            }
+          }
+        },
         "distribution": {
           "type": "object",
           "additionalProperties": false,
@@ -92,7 +127,23 @@
             }
           }
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "capabilities": { "contains": { "const": "ros" } } } },
+          "then": {
+            "required": ["permissions"],
+            "properties": { "permissions": { "required": ["ros"] } }
+          }
+        },
+        {
+          "if": { "properties": { "capabilities": { "contains": { "const": "network" } } } },
+          "then": {
+            "required": ["permissions"],
+            "properties": { "permissions": { "required": ["network"] } }
+          }
+        }
+      ]
     },
     "tags": {
       "type": "array",
@@ -101,5 +152,16 @@
     },
     "icon": { "type": "string", "format": "uri" },
     "preview": { "type": "string", "format": "uri" }
+  },
+  "$defs": {
+    "rosResources": {
+      "type": "array",
+      "maxItems": 100,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^/[A-Za-z0-9_~{}*][A-Za-z0-9_~{}/*-]*$"
+      }
+    }
   }
 }

@@ -19,6 +19,8 @@ Run `npm run validate` before opening a change.
 1. Maintain the panel in its own repository.
 2. Publish an immutable release containing `roboboy.panel.json` and its ESM bundle.
 3. Compute the exact bundle's SHA-256 SRI value (`sha256-<base64 digest>`) and add it to the distribution metadata.
+   Copy the manifest's capabilities and least-privilege `permissions` into the inventory entry; `ros` and `network`
+   capabilities require their corresponding explicit permission block.
 4. Add one file under `panels/` using the panel's stable reverse-domain ID.
 5. Add that file to `catalog.json` and run validation.
 
