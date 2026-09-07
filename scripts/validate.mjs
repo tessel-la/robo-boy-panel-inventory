@@ -18,7 +18,12 @@ const semverPattern = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/;
 const idPattern = /^[a-z0-9]+(?:[._-][a-z0-9]+)*$/;
 const integrityPattern = /^sha256-[A-Za-z0-9+/]{43}=$/;
 const rosResourcePattern = /^\/[A-Za-z0-9_~{}*][A-Za-z0-9_~{}/*-]*$/;
-const hostEndpoints = new Set(["videoStream"]);
+const hostEndpoints = new Set([
+  "videoStream",
+  "webrtcWhep",
+  "webrtcDiscovery",
+  "webrtcHls",
+]);
 
 const readJson = async (path) => JSON.parse(await readFile(path, "utf8"));
 const isHttpsUrl = (value) => {

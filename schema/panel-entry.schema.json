@@ -90,9 +90,16 @@
                 },
                 "hostEndpoints": {
                   "type": "array",
-                  "maxItems": 1,
+                  "maxItems": 4,
                   "uniqueItems": true,
-                  "items": { "enum": ["videoStream"] }
+                  "items": {
+                    "enum": [
+                      "videoStream",
+                      "webrtcWhep",
+                      "webrtcDiscovery",
+                      "webrtcHls"
+                    ]
+                  }
                 }
               }
             }
