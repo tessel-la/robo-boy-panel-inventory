@@ -8,7 +8,7 @@
     "name": "Tessella"
   },
   "latest": {
-    "version": "3.0.0",
+    "version": "3.0.1",
     "compatibility": {
       "panelApi": "^2.0.0",
       "roboboy": ">=0.7.0-alpha <1.0.0"
@@ -21,10 +21,10 @@
     },
     "distribution": {
       "type": "javascript-bundle",
-      "manifestUrl": "https://github.com/tessel-la/roboboy-webrtc-panel/releases/download/v3.0.0/roboboy.panel.json",
-      "bundleUrl": "https://github.com/tessel-la/roboboy-webrtc-panel/releases/download/v3.0.0/index.js",
+      "manifestUrl": "https://github.com/tessel-la/roboboy-webrtc-panel/releases/download/v3.0.1/roboboy.panel.json",
+      "bundleUrl": "https://github.com/tessel-la/roboboy-webrtc-panel/releases/download/v3.0.1/index.js",
       "entryPoint": "index.js",
-      "integrity": "sha256-entZSszL+nbMIWLQmuYD7qWn2c2gHXibXCHBbpVJK1A="
+      "integrity": "sha256-d9dZyyEqh5NUfIgMsD/Sn8tTfNKjzsI1R1rLD4ZQ8Og="
     }
   },
   "tags": ["camera", "webrtc", "whep", "rtsp", "video"]
