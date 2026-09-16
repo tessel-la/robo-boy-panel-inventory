@@ -59,7 +59,8 @@
               "web-usb",
               "web-serial",
               "camera",
-              "microphone"
+              "microphone",
+              "webxr"
             ]
           }
         },

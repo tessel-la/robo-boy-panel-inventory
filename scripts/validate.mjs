@@ -13,6 +13,7 @@ const capabilities = new Set([
   "web-serial",
   "camera",
   "microphone",
+  "webxr",
 ]);
 const semverPattern = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/;
 const idPattern = /^[a-z0-9]+(?:[._-][a-z0-9]+)*$/;
