@@ -8,7 +8,7 @@
     "name": "Tessella"
   },
   "latest": {
-    "version": "2.1.0",
+    "version": "2.1.1",
     "compatibility": {
       "panelApi": "^2.0.0",
       "roboboy": ">=0.3.0-0 <1.0.0"
@@ -21,10 +21,10 @@
     },
     "distribution": {
       "type": "javascript-bundle",
-      "manifestUrl": "https://github.com/tessel-la/roboboy-timeseries-panel/releases/download/v2.1.0/roboboy.panel.json",
-      "bundleUrl": "https://github.com/tessel-la/roboboy-timeseries-panel/releases/download/v2.1.0/index.js",
+      "manifestUrl": "https://github.com/tessel-la/roboboy-timeseries-panel/releases/download/v2.1.1/roboboy.panel.json",
+      "bundleUrl": "https://github.com/tessel-la/roboboy-timeseries-panel/releases/download/v2.1.1/index.js",
       "entryPoint": "index.js",
-      "integrity": "sha256-X/GzKO86ogV9+pSktdslhYqqekj4A9DI/5eWgt/Ioyc="
+      "integrity": "sha256-DehtjHARPf1bs8cL50RntLIT7Aw5Vz5B13cIlKMEBmM="
     }
   },
   "tags": ["ros", "telemetry", "plot", "timeseries"]
