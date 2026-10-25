@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "id": "la.tessel.roboboy.go2-control",
+  "name": "Go2 Control",
+  "description": "Touch joystick, visual motion feedback, and learned standing/recovery for the Unitree Go2 simulation.",
+  "repository": "https://github.com/tessel-la/robo-boy-go2-control-panel",
+  "author": {
+    "name": "tessel·la"
+  },
+  "latest": {
+    "version": "1.3.0",
+    "compatibility": {
+      "panelApi": "^2.0.0",
+      "roboboy": ">=0.3.0-0 <1.0.0"
+    },
+    "capabilities": [
+      "ros"
+    ],
+    "permissions": {
+      "ros": {
+        "subscribe": [
+          "/robot_description",
+          "/odom",
+          "/go2/status"
+        ],
+        "publish": [
+          "/cmd_vel",
+          "/go2/motion_cmd"
+        ]
+      }
+    },
+    "distribution": {
+      "type": "javascript-bundle",
+      "manifestUrl": "https://github.com/tessel-la/robo-boy-go2-control-panel/releases/download/v1.3.0/roboboy.panel.json",
+      "bundleUrl": "https://github.com/tessel-la/robo-boy-go2-control-panel/releases/download/v1.3.0/index.js",
+      "entryPoint": "index.js",
+      "integrity": "sha256-Na+Ev9VJwoW3sIdXLWkH37HT9DI+OVf3dGZSuh0KOuE="
+    }
+  },
+  "tags": [
+    "ros",
+    "go2",
+    "locomotion",
+    "simulation"
+  ]
+}
