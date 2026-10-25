@@ -2,6 +2,8 @@
   "schemaVersion": 1,
   "panels": [
     "./panels/la.tessel.roboboy.hello.json",
-    "./panels/la.tessel.roboboy.webrtc.json"
+    "./panels/la.tessel.roboboy.webrtc.json",
+    "./panels/la.tessel.roboboy.go2-control.json",
+    "./panels/la.tessel.roboboy.microduck-control.json"
   ]
 }
