@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { dirname, resolve, sep } from "node:path";
-import { fileURLToPath } from "node:url";
+import { pathToFileURL, fileURLToPath } from "node:url";
 
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const panelsRoot = resolve(projectRoot, "panels");
@@ -128,31 +128,9 @@ const validatePermissions = (entry, label) => {
   }
 };
 
-const catalog = await readJson(resolve(projectRoot, "catalog.json"));
-assert(catalog.schemaVersion === 1, "catalog.json must use schemaVersion 1.");
-assert(
-  Array.isArray(catalog.panels),
-  "catalog.json must contain a panels array.",
-);
-
-const ids = new Set();
-for (const relativePath of catalog.panels) {
-  assert(
-    typeof relativePath === "string",
-    "Every catalog entry must be a relative JSON path.",
-  );
-  const path = resolve(projectRoot, relativePath);
-  assert(
-    path.startsWith(`${panelsRoot}${sep}`),
-    `${relativePath} must resolve inside panels/.`,
-  );
-  const entry = await readJson(path);
-  const label = relativePath;
-
+export function validateEntry(entry, label = entry.id) {
   assert(entry.schemaVersion === 1, `${label}: schemaVersion must be 1.`);
-  assert(idPattern.test(entry.id), `${label}: invalid panel ID.`);
-  assert(!ids.has(entry.id), `${label}: duplicate panel ID ${entry.id}.`);
-  ids.add(entry.id);
+  assert(typeof entry.id === "string" && entry.id.length <= 128 && idPattern.test(entry.id), `${label}: invalid panel ID.`);
   assert(
     typeof entry.name === "string" && entry.name.trim(),
     `${label}: name is required.`,
@@ -176,11 +154,11 @@ for (const relativePath of catalog.panels) {
     `${label}: latest.version must be SemVer.`,
   );
   assert(
-    entry.latest.compatibility?.panelApi,
+    typeof entry.latest.compatibility?.panelApi === "string" && entry.latest.compatibility.panelApi.trim(),
     `${label}: panel API compatibility is required.`,
   );
   assert(
-    entry.latest.compatibility?.roboboy,
+    typeof entry.latest.compatibility?.roboboy === "string" && entry.latest.compatibility.roboboy.trim(),
     `${label}: Robo-Boy compatibility is required.`,
   );
   assert(
@@ -188,9 +166,7 @@ for (const relativePath of catalog.panels) {
     `${label}: capabilities must be an array.`,
   );
   assert(
-    entry.latest.capabilities.every((capability) =>
-      capabilities.has(capability),
-    ),
+    isUniqueStringArray(entry.latest.capabilities, (capability) => capabilities.has(capability)),
     `${label}: unknown capability declaration.`,
   );
   validatePermissions(entry, label);
@@ -226,6 +202,23 @@ for (const relativePath of catalog.panels) {
   );
 }
 
-console.log(
-  `Validated ${ids.size} panel inventory entr${ids.size === 1 ? "y" : "ies"}.`,
-);
+export async function validateCatalog() {
+  const catalog = await readJson(resolve(projectRoot, "catalog.json"));
+  assert(catalog.schemaVersion === 1, "catalog.json must use schemaVersion 1.");
+  assert(Array.isArray(catalog.panels), "catalog.json must contain a panels array.");
+  const ids = new Set();
+  for (const relativePath of catalog.panels) {
+    assert(typeof relativePath === "string", "Every catalog entry must be a relative JSON path.");
+    const path = resolve(projectRoot, relativePath);
+    assert(path.startsWith(`${panelsRoot}${sep}`), `${relativePath} must resolve inside panels/.`);
+    const entry = await readJson(path);
+    validateEntry(entry, relativePath);
+    assert(!ids.has(entry.id), `${relativePath}: duplicate panel ID ${entry.id}.`);
+    ids.add(entry.id);
+  }
+  console.log(`Validated ${ids.size} panel inventory entries.`);
+}
+
+if (process.argv[1] && pathToFileURL(resolve(process.argv[1])).href === import.meta.url) {
+  await validateCatalog();
+}

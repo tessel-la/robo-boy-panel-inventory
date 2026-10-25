@@ -5,6 +5,11 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
-    "validate": "node scripts/validate.mjs"
+    "validate": "node scripts/validate.mjs",
+    "register": "node scripts/register.mjs",
+    "test": "node --test test/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }
