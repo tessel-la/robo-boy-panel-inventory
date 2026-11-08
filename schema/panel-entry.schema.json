@@ -76,7 +76,9 @@
                 "selectTopic": { "type": "boolean" },
                 "subscribe": { "$ref": "#/$defs/rosResources" },
                 "publish": { "$ref": "#/$defs/rosResources" },
-                "services": { "$ref": "#/$defs/rosResources" }
+                "services": { "$ref": "#/$defs/rosResources" },
+                "actions": { "$ref": "#/$defs/rosResources" },
+                "control": { "type": "boolean" }
               }
             },
             "network": {
