@@ -43,6 +43,36 @@ The official inventory is consumed directly by Robo-Boy's remote panel installer
 only after their release URLs are anonymously reachable and their recorded integrity matches the exact published
 bundle bytes.
 
+## SDK 2.3 action and control permissions
+
+Panels using the action/control APIs in [Panel SDK 2.3.0](https://github.com/tessel-la/robo-boy/releases/tag/panel-sdk-v2.3.0)
+require Robo-Boy 0.20.0-alpha or newer. Copy the released manifest's compatibility and explicit ROS grants into
+the entry's `latest` object, for example:
+
+```json
+{
+  "compatibility": {
+    "panelApi": "^2.0.0",
+    "roboboy": ">=0.20.0-alpha <1.0.0"
+  },
+  "capabilities": ["ros"],
+  "permissions": {
+    "ros": {
+      "actions": ["/robot/move"],
+      "control": true
+    }
+  }
+}
+```
+
+`actions` uses the same bounded, unique ROS resource-pattern lists as topic and service grants. `control` is a
+boolean permitting explicit user-initiated requests for the host connection's control lease; it does not grant
+ownership or authorize an action by itself. Both permissions require the `ros` capability.
+
+Existing panel releases keep their recorded permissions, compatibility ranges and hashes. Add new grants only
+when publishing a matching panel release. The inventory catalogs runnable panels; the type-only SDK is distributed
+separately as its GitHub release tarball.
+
 ## Register Go2 and Microduck releases
 
 Use Node.js 22 or later. After making the panel repository public and publishing its

@@ -62,7 +62,7 @@ const validatePermissions = (entry, label) => {
     assert(
       hasOnlyKeys(
         ros,
-        new Set(["discover", "selectTopic", "subscribe", "publish", "services"]),
+        new Set(["discover", "selectTopic", "subscribe", "publish", "services", "actions", "control"]),
       ),
       `${label}: the ros capability requires explicit ROS permissions.`,
     );
@@ -74,7 +74,11 @@ const validatePermissions = (entry, label) => {
       ros.selectTopic === undefined || typeof ros.selectTopic === "boolean",
       `${label}: permissions.ros.selectTopic must be boolean.`,
     );
-    for (const key of ["subscribe", "publish", "services"]) {
+    assert(
+      ros.control === undefined || typeof ros.control === "boolean",
+      `${label}: permissions.ros.control must be boolean.`,
+    );
+    for (const key of ["subscribe", "publish", "services", "actions"]) {
       assert(
         ros[key] === undefined ||
           isUniqueStringArray(ros[key], (resource) => rosResourcePattern.test(resource)),

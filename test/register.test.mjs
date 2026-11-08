@@ -38,6 +38,26 @@ test('rejects changed bundle bytes before registration', async t => {
   await assert.rejects(releaseEntry('go2', '1.2.3'), /SHA-256/);
 });
 
+test('preserves SDK 2.3 action/control grants and host compatibility from the verified release', async t => {
+  const released = {
+    ...manifest,
+    compatibility: { panelApi: '^2.0.0', roboboy: '>=0.20.0-alpha <1.0.0' },
+    permissions: { ros: { actions: ['/robot/move'], control: true, publish: ['/cmd_vel'] } },
+  };
+  fakeDownloads(t, released);
+  const entry = await releaseEntry('go2', '1.2.3');
+  assert.deepEqual(entry.latest.permissions, released.permissions);
+  assert.deepEqual(entry.latest.compatibility, released.compatibility);
+  const dir = await mkdtemp(join(tmpdir(), 'inventory-action-register-'));
+  t.after(() => rm(dir, { recursive: true, force: true }));
+  await mkdir(join(dir, 'panels'));
+  await writeFile(join(dir, 'catalog.json'), JSON.stringify({ schemaVersion: 1, panels: [] }));
+  await registerEntry(entry, dir);
+  const stored = JSON.parse(await readFile(join(dir, `panels/${entry.id}.json`), 'utf8'));
+  assert.deepEqual(stored.latest.permissions, released.permissions);
+  assert.deepEqual(stored.latest.compatibility, released.compatibility);
+});
+
 test('rejects mismatched manifest identity', async t => {
   fakeDownloads(t, { ...manifest, id: 'wrong' });
   await assert.rejects(releaseEntry('go2', '1.2.3'), /identity/);
